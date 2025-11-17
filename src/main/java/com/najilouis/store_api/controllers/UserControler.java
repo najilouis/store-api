@@ -1,6 +1,7 @@
 package com.najilouis.store_api.controllers;
 
 import com.najilouis.store_api.dtos.RegisterUserRequest;
+import com.najilouis.store_api.dtos.UpdateUserRequest;
 import com.najilouis.store_api.dtos.UserDto;
 import com.najilouis.store_api.entities.User;
 import com.najilouis.store_api.mappers.UserMapper;
@@ -67,5 +68,28 @@ public class UserControler {
         var userDto = userMapper.toDto(user);
         var uri = uriBuilder.path("/user/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable(name = "id") Long id,
+               @RequestBody UpdateUserRequest request){
+        var user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+
+//        user.setName(request.getName());
+//        user.setEmail(request.getEmail());
+//
+//        userRepository.save(user);
+//
+//        return ResponseEntity.ok(userMapper.toDto(user));
+
+        userMapper.update(request, user);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(userMapper.toDto(user));
+
     }
 }
