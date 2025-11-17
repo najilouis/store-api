@@ -2,6 +2,7 @@ package com.najilouis.store_api.controllers;
 
 import com.najilouis.store_api.dtos.UserDto;
 import com.najilouis.store_api.entities.User;
+import com.najilouis.store_api.mappers.UserMapper;
 import com.najilouis.store_api.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserControler {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 //    public UserControler(UserRepository userRepository){
 //        this.userRepository = userRepository;
@@ -28,7 +30,8 @@ public class UserControler {
     public Iterable<UserDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserDto(user.getId(), user.getName(), user.getEmail()))
+//                .map(user -> userMapper.toDto(user))
+                .map(userMapper::toDto)
                 .toList();
     }
 
@@ -40,7 +43,7 @@ public class UserControler {
             return ResponseEntity.notFound().build();
         }
 //        return new ResponseEntity<>(user, HttpStatus.OK);
-        var userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
-        return ResponseEntity.ok(userDto);
+
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 }
