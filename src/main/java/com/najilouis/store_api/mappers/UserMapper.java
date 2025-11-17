@@ -1,5 +1,6 @@
 package com.najilouis.store_api.mappers;
 
+import com.najilouis.store_api.dtos.RegisterUserRequest;
 import com.najilouis.store_api.dtos.UserDto;
 import com.najilouis.store_api.entities.User;
 import org.mapstruct.Mapper;
@@ -10,4 +11,5 @@ public interface UserMapper {
 
 //    @Mapping(target =  "createdAt", expression = "java(java.time.LocalDateTime.now())")
     UserDto toDto(User user);
+    User toEntity(RegisterUserRequest request);
 }
