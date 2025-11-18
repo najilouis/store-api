@@ -1,10 +1,12 @@
 spring:
   application:
     name=store-api
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:mysql://localhost:3306/store_api?createDatabaseIfNotExist=true
-    username: root
-    password: root@2017
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
   jpa:
     show-sql: true
 server:
