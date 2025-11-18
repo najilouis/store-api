@@ -1,5 +1,6 @@
 package com.najilouis.store_api.controllers;
 
+import com.najilouis.store_api.dtos.ChangePasswordRequest;
 import com.najilouis.store_api.dtos.RegisterUserRequest;
 import com.najilouis.store_api.dtos.UpdateUserRequest;
 import com.najilouis.store_api.dtos.UserDto;
@@ -102,7 +103,24 @@ public class UserControler {
 
         userRepository.delete(user);
         return ResponseEntity.noContent().build();
+    }
 
+    @PostMapping("/{id}/change-password")
+    public  ResponseEntity<Void> changePassword(
+            @PathVariable Long id,
+            @RequestBody ChangePasswordRequest request){
+        var user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
 
+        if(!user.getPassword().equals(request.getOldPassword())){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+
+        return ResponseEntity.noContent().build();
     }
 }
